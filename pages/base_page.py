@@ -16,11 +16,11 @@ class BasePage:
     
     def escrever(self, locator, text):
         self.encontar_elemento(locator).send_keys(text)
-        #self.espera()
+        self.espera()
     
     def clicar(self, locator):
         self.encontar_elemento(locator).click()
-        #self.espera()
+        self.espera()
     
     def verificar_se_elemento_existe(self, locator): 
         assert self.encontar_elemento(locator).is_displayed(), f"O elemento '{locator}' não foi encontrado na tela."
