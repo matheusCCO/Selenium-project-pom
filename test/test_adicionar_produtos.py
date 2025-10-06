@@ -1,31 +1,28 @@
 import pytest
-from selenium.webdriver.common.by import By
+from pages.carrinho_page import CarrinhoPage
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-
 @pytest.mark.usefixtures("setup_teardown")
 @pytest.mark.carrinho
 class TestAddProduto():
     def test_add_produto(self):
         login_page = LoginPage()
         home_page = HomePage()
+        carrinho_page = CarrinhoPage()
+
+        produto_1 = "Sauce Labs Backpack"
+        produto_2 = "Sauce Labs Bike Light"
 
         login_page.fazer_login("standard_user", "secret_sauce")
 
-        home_page.procura_item()
+        home_page.adicionar_item_carrinho(produto_1)
+        home_page.acessa_carrinho()
 
-        #driver.find_element(By.XPATH, "//*[@class='inventory_item_name ' and text()='Sauce Labs Backpack']").click()
+        carrinho_page.verifica_item_carrinho(produto_1)
+        carrinho_page.clicar_continuar_comprando()
 
-        # driver.find_element(By.ID,"add-to-cart").click()
-        # driver.find_element(By.XPATH, "//*[@class='shopping_cart_link']").click()
-        # assert driver.find_element(By.XPATH, "//*[@class='inventory_item_name' and text()='Sauce Labs Backpack']").is_displayed()
+        home_page.adicionar_item_carrinho("produto_2")
 
-        # driver.find_element(By.ID, "continue-shopping").click()
-
-        # driver.find_element(By.XPATH, "//*[@class='inventory_item_name ' and text()='Sauce Labs Bike Light']").click()
-        # driver.find_element(By.ID,"add-to-cart").click()
-
-        # driver.find_element(By.XPATH, "//*[@class='shopping_cart_link']").click()
-
-        # assert driver.find_element(By.XPATH, "//*[@class='inventory_item_name' and text()='Sauce Labs Backpack']").is_displayed()
-        # assert driver.find_element(By.XPATH, "//*[@class='inventory_item_name' and text()='Sauce Labs Bike Light']").is_displayed()
+        home_page.acessa_carrinho()
+        carrinho_page.verifica_item_carrinho(produto_1)
+        carrinho_page.verifica_item_carrinho(produto_2)

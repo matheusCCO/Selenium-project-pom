@@ -20,5 +20,5 @@ class LoginPage(BasePage):
         self.vefificar_se_elemento_existe(self.erro_mensagem_login)
 
     def verificar_texto_mensagem_erro_login(self, texto_esperado):
-        texto_encontrado = self.pegar_testo_elemento(self.erro_mensagem_login)
+        texto_encontrado = self.pegar_texto_elemento(self.erro_mensagem_login)
         assert texto_encontrado == texto_esperado, f"o texto retornado foi '{texto_encontrado}', mas era esperado o texto '{texto_esperado}'"

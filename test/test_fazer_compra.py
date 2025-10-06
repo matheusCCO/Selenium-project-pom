@@ -1,32 +1,58 @@
 import pytest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-
-import conftest
+from pages.carrinho_page import CarrinhoPage
+from pages.home_page import HomePage
+from pages.login_page import LoginPage
+from pages.preenche_informacao_pedido import PreencheInformacao
+from pages.valida_informacao_pedido import ValidaPedido 
 
 @pytest.mark.usefixtures("setup_teardown")
 @pytest.mark.carrinho
 class TestFazerCompra():
     def test_cazer_compra(self):
-        driver = conftest.driver
-        driver.find_element(By.ID,"user-name").send_keys("standard_user")
-        driver.find_element(By.ID,"password").send_keys("secret_sauce")
-        driver.find_element(By.ID,"login-button").click()
+        login_page = LoginPage()
+        home_page = HomePage()
+        carrinho_page = CarrinhoPage()
+        informacao_pedido = PreencheInformacao()
+        valida_pedido = ValidaPedido()
 
-        driver.find_element(By.XPATH, "//*[@class='inventory_item_name ' and text()='Sauce Labs Backpack']").click()
+        produto_1 = "Sauce Labs Backpack"
+        produto_2 = "Sauce Labs Bike Light"
+        nome="Lucas"
+        sobrenome="Silva"
+        cep= 99999999
 
-        driver.find_element(By.ID,"add-to-cart").click()
-        driver.find_element(By.XPATH, "//*[@class='shopping_cart_link']").click()
-        assert driver.find_element(By.XPATH, "//*[@class='inventory_item_name' and text()='Sauce Labs Backpack']").is_displayed()
 
-        driver.find_element(By.ID,"checkout").click()
-        driver.find_element(By.ID,"first-name").send_keys("Teste")
-        driver.find_element(By.ID,"last-name").send_keys("Teste")
-        driver.find_element(By.ID,"postal-code").send_keys("99999999")
-        driver.find_element(By.ID,"continue").click()
+        login_page.fazer_login("standard_user", "secret_sauce")
+        home_page.adicionar_item_carrinho(produto_1)
+        home_page.voltar_para_home_page()
 
-        assert driver.find_element(By.XPATH, "//*[@class='title']").is_displayed()
+        home_page.adicionar_item_carrinho(produto_2)
+        home_page.acessa_carrinho()
 
-        driver.find_element(By.ID,"finish").click()
+        carrinho_page.verifica_item_carrinho(produto_1)
+        carrinho_page.verifica_item_carrinho(produto_2)
+        carrinho_page.fazer_compar_item_carrinho()
+        informacao_pedido.preenche_informacao(nome,sobrenome,cep)
+        valida_pedido.verifica_informacao_pedido()
+        
 
-        assert driver.find_element(By.XPATH, "//*[@class='complete-header']").is_displayed()
+
+
+ 
+        # driver.find_element(By.XPATH, "//*[@class='inventory_item_name ' and text()='Sauce Labs Backpack']").click()
+
+        # driver.find_element(By.ID,"add-to-cart").click()
+        # driver.find_element(By.XPATH, "//*[@class='shopping_cart_link']").click()
+        # assert driver.find_element(By.XPATH, "//*[@class='inventory_item_name' and text()='Sauce Labs Backpack']").is_displayed()
+
+        # driver.find_element(By.ID,"checkout").click()
+        # driver.find_element(By.ID,"first-name").send_keys("Teste")
+        # driver.find_element(By.ID,"last-name").send_keys("Teste")
+        # driver.find_element(By.ID,"postal-code").send_keys("99999999")
+        # driver.find_element(By.ID,"continue").click()
+
+        # assert driver.find_element(By.XPATH, "//*[@class='title']").is_displayed()
+
+        # driver.find_element(By.ID,"finish").click()
+
+        # assert driver.find_element(By.XPATH, "//*[@class='complete-header']").is_displayed()
